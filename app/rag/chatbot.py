@@ -1,5 +1,5 @@
 from langchain_ollama import ChatOllama
-from langchain.prompts import ChatPromptTemplate
+from langchain_core.prompts import ChatPromptTemplate
 from app.rag.vectorstore import get_vectorstore
 
 SYSTEM_PROMPT = """Tu es l'assistant virtuel officiel de Coficab, une entreprise leader dans la fabrication de câbles automobiles.
