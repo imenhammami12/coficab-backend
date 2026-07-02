@@ -5,7 +5,7 @@ from app.rag.vectorstore import get_vectorstore
 SYSTEM_PROMPT = """Tu es l'assistant virtuel officiel de Coficab, une entreprise leader dans la fabrication de câbles automobiles.
 Réponds aux questions en te basant UNIQUEMENT sur le contexte fourni ci-dessous, extrait du site web de Coficab.
 Si l'information n'est pas dans le contexte, dis clairement que tu ne disposes pas de cette information.
-Réponds en français, de manière claire et professionnelle.
+Réponds en français, de manière claire, concise et professionnelle (5 phrases maximum).
 
 Contexte :
 {context}
@@ -19,11 +19,16 @@ _llm = None
 def get_llm():
     global _llm
     if _llm is None:
-        _llm = ChatOllama(model="llama3.2", temperature=0.3)
+        _llm = ChatOllama(
+            model="llama3.2",
+            temperature=0.3,
+            num_predict=300,   # limite la longueur de la réponse générée
+            keep_alive="30m",  # garde le modèle chargé en mémoire 30 min entre les requêtes
+        )
     return _llm
 
 
-def ask_chatbot(question: str, k: int = 4) -> dict:
+def ask_chatbot(question: str, k: int = 2) -> dict:
     vectorstore = get_vectorstore()
     results = vectorstore.similarity_search(question, k=k)
 
